@@ -1,0 +1,32 @@
+@import "~bootstrap/scss/bootstrap";
+
+$base-background: #272b30;
+$base-text-color: #eeeeee;
+$secondary-background: #16191e;
+
+body {
+     background-color: $base-background !important;
+}
+
+.text-light {
+     color: $base-text-color;
+}
+
+.bg-night {
+     background-color: $secondary-background !important;
+}
+
+.input {
+     height: 3rem;
+     background-color: $secondary-background !important;
+     border: none !important;
+}
+
+.glow {
+     box-shadow: 0px 4px 13px -9px #3b94a9;
+}
+
+.title {
+     color: #ffffff !important;
+     text-shadow: 0 0 10px #ffffff;
+}
