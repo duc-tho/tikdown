@@ -1,12 +1,5 @@
 import axios from "axios";
-import React, {
-     ChangeEvent,
-     ChangeEventHandler,
-     Fragment,
-     useEffect,
-     useState,
-} from "react";
-import FileDownload from "js-file-download";
+import React, { Fragment, useState } from "react";
 import {
      Button,
      Col,
@@ -17,7 +10,6 @@ import {
 } from "react-bootstrap";
 import "./App.scss";
 import { tiktokApi } from "./services/api/tiktok.api";
-import { setSourceMapRange } from "typescript";
 
 function App() {
      let [url, setUrl] = useState("");
@@ -43,19 +35,23 @@ function App() {
 
      let getVid = (id: string) => {
           tiktokApi.getSingle(`?aweme_ids=[${id}]`).then((res: any) => {
-               console.log(res);
-
-               axios.get(
-                    res.aweme_details[0].video.bit_rate[0].play_addr
+               axios({
+                    url: res.aweme_details[0].video.bit_rate[0].play_addr
                          .url_list[0],
-                    {
-                         headers: {
-                              "Content-Type": "application/octet-stream",
-                              responseType: "blob",
-                         },
-                    }
-               ).then((resp) => {
-                    FileDownload(res.data, `${new Date().getTime()}.mp4`);
+                    method: "GET",
+                    responseType: "blob",
+               }).then((resp) => {
+                    console.log(resp);
+
+                    let link = document.createElement("a");
+                    link.target = "_blank";
+                    link.download = `${new Date().getTime()}.mp4`;
+                    link.href = URL.createObjectURL(
+                         new Blob([resp.data], { type: "video/mp4" })
+                    );
+                    link.download = "";
+                    link.click();
+                    link.remove();
                });
           });
      };
