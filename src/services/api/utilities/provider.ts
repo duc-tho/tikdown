@@ -4,7 +4,7 @@ import axios from "axios";
 import { handleResponse, handleError } from "./response";
 
 // khai báo url để gọi api
-const BASE_URL = process.env.BASE_URL || "https://api.tiktokv.com";
+const BASE_URL = process.env.BASE_URL || "https://api.douyin.wtf";
 
 /** @param {string} resource */
 const getAll = (resource: string) => {
@@ -18,7 +18,7 @@ const getAll = (resource: string) => {
 /** @param {string} id */
 const getSingle = (resource: string, id: string) => {
      return axios
-          .get(`${BASE_URL}/${resource}/${id}`)
+          .get(`${BASE_URL}/${resource}${id}`)
           .then(handleResponse)
           .catch(handleError);
 };

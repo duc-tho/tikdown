@@ -1,7 +1,7 @@
 import { ApiCore } from "./utilities/core";
 
 // todo API
-const url = `aweme/v1/multi/aweme/detail`;
+const url = `api`;
 
 const tiktokApi = new ApiCore({
      getAll: false,

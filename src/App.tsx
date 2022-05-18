@@ -13,58 +13,48 @@ import { tiktokApi } from "./services/api/tiktok.api";
 
 function App() {
      let [url, setUrl] = useState("");
-     let id = "";
 
      let urlChangeHandle = (e: any) => {
           let targetUrl = e.target.value;
-          let id = getIdFromUrl(targetUrl);
-
           setUrl(targetUrl);
-
-          if (!id) return;
-
-          getVid(id);
+          getVid(targetUrl);
      };
 
-     let getIdFromUrl = (url: string) => {
-          let targetVideo = url.match(/video\/[\d]*/gi);
+     let getVid = (url: string) => {
+          tiktokApi
+               .getSingle(`?url=${url}`)
+               .then((res: any) => {
+                    axios({
+                         url: res.nwm_video_url,
+                         method: "GET",
+                         responseType: "blob",
+                    })
+                         .then((resp) => {
+                              console.log(resp);
 
-          if (targetVideo) return targetVideo[0].split("/")[1];
-          else return null;
-     };
-
-     let getVid = (id: string) => {
-          tiktokApi.getSingle(`?aweme_ids=[${id}]`).then((res: any) => {
-               axios({
-                    url: res.aweme_details[0].video.bit_rate[0].play_addr
-                         .url_list[0],
-                    method: "GET",
-                    responseType: "blob",
-               }).then((resp) => {
-                    console.log(resp);
-
-                    let link = document.createElement("a");
-                    link.target = "_blank";
-                    link.download = `${new Date().getTime()}.mp4`;
-                    link.href = URL.createObjectURL(
-                         new Blob([resp.data], { type: "video/mp4" })
-                    );
-                    link.download = "";
-                    link.click();
-                    link.remove();
+                              let link = document.createElement("a");
+                              link.target = "_blank";
+                              link.download = `${new Date().getTime()}.mp4`;
+                              link.href = URL.createObjectURL(
+                                   new Blob([resp.data], { type: "video/mp4" })
+                              );
+                              link.download = "";
+                              link.click();
+                              link.remove();
+                         })
+                         .catch((error) => {
+                              alert("Lỗi dùi: " + error);
+                         });
+               })
+               .catch((error: any) => {
+                    alert("Lỗi dùi: " + error);
                });
-          });
      };
 
      let pastClickHandle = () => {
           navigator.clipboard.readText().then((text) => {
                setUrl(text);
-
-               let id = getIdFromUrl(text);
-
-               if (!id) return;
-
-               getVid(id);
+               getVid(text);
           });
      };
 
