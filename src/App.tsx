@@ -21,34 +21,26 @@ function App() {
      };
 
      let getVid = (url: string) => {
-          tiktokApi
-               .getSingle(`?url=${url}`)
-               .then((res: any) => {
-                    axios({
-                         url: res.nwm_video_url,
-                         method: "GET",
-                         responseType: "blob",
-                    })
-                         .then((resp) => {
-                              console.log(resp);
-
-                              let link = document.createElement("a");
-                              link.target = "_blank";
-                              link.download = `${new Date().getTime()}.mp4`;
-                              link.href = URL.createObjectURL(
-                                   new Blob([resp.data], { type: "video/mp4" })
-                              );
-                              link.download = "";
-                              link.click();
-                              link.remove();
-                         })
-                         .catch((error) => {
-                              alert("Lỗi dùi: " + error);
-                         });
-               })
-               .catch((error: any) => {
-                    alert("Lỗi dùi: " + error);
+          tiktokApi.getSingle(`tiktok?url=${url}`).then((res: any) => {
+               axios({
+                    url: res.nwm_video_url,
+                    method: "GET",
+                    responseType: "blob",
+                    headers: {
+                         "Content-type": "application/octet-stream",
+                    },
+               }).then((resp) => {
+                    let link = document.createElement("a");
+                    link.target = "_blank";
+                    link.download = `${new Date().getTime()}.mp4`;
+                    link.href = URL.createObjectURL(
+                         new Blob([resp.data], { type: "video/mp4" })
+                    );
+                    link.download = "";
+                    link.click();
+                    link.remove();
                });
+          });
      };
 
      let pastClickHandle = () => {
