@@ -13,6 +13,7 @@ import { tiktokApi } from "./services/api/tiktok.api";
 
 function App() {
      let [url, setUrl] = useState("");
+     let [status, setStatus] = useState("Đang chờ...");
 
      useEffect(() => {
           const delayTimeout = setTimeout(() => {
@@ -24,10 +25,13 @@ function App() {
 
      let urlChangeHandle = (e: any) => {
           let targetUrl = e.target.value;
+
           setUrl(targetUrl);
      };
 
      let getVid = (url: string) => {
+          if(!url) return;
+
           tiktokApi
                .getSingle(`tiktok?url=${url}`)
                .then((res: any) => {
@@ -40,6 +44,8 @@ function App() {
                          );
                          return;
                     }
+
+                    setStatus(`Đang Tải xún ...`);
 
                     axios({
                          url: res.nwm_video_url,
@@ -58,6 +64,13 @@ function App() {
                          link.download = "";
                          link.click();
                          link.remove();
+
+                         setStatus(`Tải xong vid... ${res.video_title}`);
+                         setUrl('');
+
+                         setTimeout(() => {
+                              setStatus(`Đang chờ...`);
+                         }, 7000);
                     });
                })
                .catch((error: any) => {
@@ -66,10 +79,13 @@ function App() {
      };
 
      let pastClickHandle = () => {
+          let clipboard = "";
           navigator.clipboard.readText().then((text) => {
                setUrl(text);
-               getVid(text);
+               clipboard = text;
           });
+
+          getVid(clipboard);
      };
 
      return (
@@ -102,7 +118,7 @@ function App() {
                                         id="link"
                                         className="bg-dark border-dark text-light"
                                    >
-                                        Link
+                                        Moah :3
                                    </InputGroup.Text>
                                    <FormControl
                                         value={url}
@@ -119,6 +135,11 @@ function App() {
                                         Dán
                                    </Button>
                               </InputGroup>
+                         </Col>
+                    </Row>
+                    <Row>
+                         <Col>
+                              <h5 className="white-glow py-1 px-2 rounded text-success">{status}</h5>
                          </Col>
                     </Row>
                </Container>
