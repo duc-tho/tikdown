@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
      Button,
      Col,
@@ -14,33 +14,55 @@ import { tiktokApi } from "./services/api/tiktok.api";
 function App() {
      let [url, setUrl] = useState("");
 
+     useEffect(() => {
+          const delayTimeout = setTimeout(() => {
+               getVid(url);
+          }, 1000);
+
+          return () => clearTimeout(delayTimeout);
+     }, [url]);
+
      let urlChangeHandle = (e: any) => {
           let targetUrl = e.target.value;
           setUrl(targetUrl);
-          getVid(targetUrl);
      };
 
      let getVid = (url: string) => {
-          tiktokApi.getSingle(`tiktok?url=${url}`).then((res: any) => {
-               axios({
-                    url: res.nwm_video_url,
-                    method: "GET",
-                    responseType: "blob",
-                    headers: {
-                         "Content-type": "application/octet-stream",
-                    },
-               }).then((resp) => {
-                    let link = document.createElement("a");
-                    link.target = "_blank";
-                    link.download = `${new Date().getTime()}.mp4`;
-                    link.href = URL.createObjectURL(
-                         new Blob([resp.data], { type: "video/mp4" })
-                    );
-                    link.download = "";
-                    link.click();
-                    link.remove();
+          tiktokApi
+               .getSingle(`tiktok?url=${url}`)
+               .then((res: any) => {
+                    if (res.name && res.name === "AxiosError") {
+                         alert(
+                              `Lỗi dùi: ${
+                                   res.response.data.reason ||
+                                   "[500] Hong bít lỗi gì"
+                              }`
+                         );
+                         return;
+                    }
+
+                    axios({
+                         url: res.nwm_video_url,
+                         method: "GET",
+                         responseType: "blob",
+                         headers: {
+                              "Content-type": "application/octet-stream",
+                         },
+                    }).then((resp) => {
+                         let link = document.createElement("a");
+                         link.target = "_blank";
+                         link.download = `${new Date().getTime()}.mp4`;
+                         link.href = URL.createObjectURL(
+                              new Blob([resp.data], { type: "video/mp4" })
+                         );
+                         link.download = "";
+                         link.click();
+                         link.remove();
+                    });
+               })
+               .catch((error: any) => {
+                    console.log(error);
                });
-          });
      };
 
      let pastClickHandle = () => {
