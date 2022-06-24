@@ -6,14 +6,31 @@ import {
      Container,
      FormControl,
      InputGroup,
-     Row,
+     Row
 } from "react-bootstrap";
+import { Alert, AlertColor, Snackbar, CircularProgress  } from '@mui/material';
 import "./App.scss";
 import { tiktokApi } from "./services/api/tiktok.api";
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 function App() {
      let [url, setUrl] = useState("");
      let [status, setStatus] = useState("Đang chờ...");
+     let [open, setOpen] = useState(false);
+     let [loadingData, setLoadingData] = useState(false);
+     let notiStatusList: { 
+          success:  AlertColor | undefined,
+          info:  AlertColor | undefined,
+          warning:  AlertColor | undefined,
+          error:  AlertColor | undefined
+     } = {
+          success: 'success',
+          info: 'info',
+          warning: 'warning',
+          error: 'error'
+     };
+     let [notiStatus, setNotiStatus] = useState(notiStatusList.info);
 
      useEffect(() => {
           const delayTimeout = setTimeout(() => {
@@ -30,31 +47,41 @@ function App() {
      };
 
      let getVid = (url: string) => {
-          if(!url) return;
+          if (!url) return;
+
+          setStatus(`Đang Lấy Thông Tin Vid ...`);
+          setLoadingData(true);
+          setOpen(true);
 
           tiktokApi
                .getSingle(`tiktok?url=${url}`)
                .then((res: any) => {
                     if (res.name && res.name === "AxiosError") {
-                         alert(
-                              `Lỗi dùi: ${
-                                   res.response.data.reason ||
-                                   "[500] Hong bít lỗi gì"
-                              }`
+                         setNotiStatus(notiStatusList.error);
+                         setLoadingData(false);
+                         setStatus(
+                              `Lỗi dùi: ${res.response.data.reason ||
+                                   "[500] Hong bít lỗi gì"}`
                          );
+
+                         setTimeout(() => {
+                              setOpen(false);
+                              setNotiStatus(notiStatusList.info);
+                         }, 4000);
                          return;
                     }
 
-                    setStatus(`Đang Tải xún ...`);
+                    setNotiStatus(notiStatusList.info);
+                    setStatus(`Đang Tải xún`);
 
                     axios({
                          url: res.nwm_video_url,
                          method: "GET",
                          responseType: "blob",
                          headers: {
-                              "Content-type": "application/octet-stream",
-                         },
-                    }).then((resp) => {
+                              "Content-type": "application/octet-stream"
+                         }
+                    }).then(resp => {
                          let link = document.createElement("a");
                          link.target = "_blank";
                          link.download = `${new Date().getTime()}.mp4`;
@@ -65,12 +92,15 @@ function App() {
                          link.click();
                          link.remove();
 
-                         setStatus(`Tải xong vid... ${res.video_title}`);
-                         setUrl('');
+                         setNotiStatus(notiStatusList.success);
+                         setLoadingData(false);
+                         setStatus(`Tải xún thành công! - ${res.video_title}`);
+                         setUrl("");
 
                          setTimeout(() => {
-                              setStatus(`Đang chờ...`);
-                         }, 7000);
+                              setOpen(false)
+                              setNotiStatus(notiStatusList.info);
+                         }, 4000);
                     });
                })
                .catch((error: any) => {
@@ -80,7 +110,7 @@ function App() {
 
      let pastClickHandle = () => {
           let clipboard = "";
-          navigator.clipboard.readText().then((text) => {
+          navigator.clipboard.readText().then(text => {
                setUrl(text);
                clipboard = text;
           });
@@ -97,28 +127,28 @@ function App() {
                     <Row>
                          <Col>
                               <h1 className="text-center display-5 text-light title">
-                                   Tiktok Downloader
+                                   Trình tải Video Tiktok
                               </h1>
                               <p className="text-center text-muted">
-                                   Made by{" "}
+                                   Được thực hiện bởi {" "}
                                    <span className="fw-bold text-info">
                                         ntho
                                    </span>{" "}
-                                   for{" "}
+                                        dành cho{" "}
                                    <span className="fw-bold text-danger">
                                         pdan
                                    </span>
                               </p>
                          </Col>
                     </Row>
-                    <Row className="w-lg-50">
+                    <Row className="w-lg-75">
                          <Col>
                               <InputGroup className="mb-3 glow">
                                    <InputGroup.Text
                                         id="link"
                                         className="bg-dark border-dark text-light"
                                    >
-                                        Moah :3
+                                        <FavoriteIcon style={{ width: '1rem' }}/>
                                    </InputGroup.Text>
                                    <FormControl
                                         value={url}
@@ -131,17 +161,30 @@ function App() {
                                    <Button
                                         className="btn-dark"
                                         onClick={pastClickHandle}
+                                        disabled={loadingData}
                                    >
-                                        Dán
+                                        { loadingData ? <CircularProgress size={'1rem'} color="success" /> : <ContentPasteIcon style={{ width: '1rem' }} />}
                                    </Button>
                               </InputGroup>
                          </Col>
                     </Row>
-                    <Row>
+                    {/* <Row>
                          <Col>
-                              <h5 className="white-glow py-1 px-2 rounded text-success">{status}</h5>
+                              <h5 className="white-glow py-1 px-2 rounded text-success">
+                                   {status}
+                              </h5>
                          </Col>
-                    </Row>
+                    </Row> */}
+                    <Snackbar
+                         open={open}
+                    >
+                         <Alert
+                              severity={ notiStatus }
+                              sx={{ width: "100%" }}
+                         >
+                              { status }
+                         </Alert>
+                    </Snackbar>
                </Container>
           </Fragment>
      );
