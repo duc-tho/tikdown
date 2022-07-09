@@ -1,20 +1,15 @@
 import axios from "axios";
 import React, { Fragment, useEffect, useState } from "react";
 import {
-     Button,
-     Col,
-     Container,
-     FormControl,
-     InputGroup,
-     Row
+     Button, Col,Container, FormControl, InputGroup, Row
 } from "react-bootstrap";
 import { Alert, AlertColor, Snackbar, CircularProgress  } from '@mui/material';
-import "./App.scss";
-import { tiktokApi } from "./services/api/tiktok.api";
+// import "./G.scss";
+import { tiktokApi } from "../services/api/tiktok.api";
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
-function App() {
+function TiktokDownloader() {
      let [url, setUrl] = useState("");
      let [status, setStatus] = useState("Đang chờ...");
      let [open, setOpen] = useState(false);
@@ -122,7 +117,7 @@ function App() {
           <Fragment>
                <Container
                     fluid
-                    className="vh-100 d-flex justify-content-center align-items-center flex-column"
+                    className="h-100 d-flex justify-content-center align-items-center flex-column"
                >
                     <Row>
                          <Col>
@@ -168,13 +163,6 @@ function App() {
                               </InputGroup>
                          </Col>
                     </Row>
-                    {/* <Row>
-                         <Col>
-                              <h5 className="white-glow py-1 px-2 rounded text-success">
-                                   {status}
-                              </h5>
-                         </Col>
-                    </Row> */}
                     <Snackbar
                          open={open}
                     >
@@ -190,4 +178,4 @@ function App() {
      );
 }
 
-export default App;
+export default TiktokDownloader;

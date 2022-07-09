@@ -1,0 +1,9 @@
+.wrap {
+     display: flex;
+     flex-direction: column;
+     height: 100vh;
+}
+
+.pageContentSection {
+     flex-grow: 1;
+}

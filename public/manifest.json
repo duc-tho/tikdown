@@ -1,6 +1,7 @@
 {
-  "short_name": "iu bé Đan",
-  "name": "Tiktok Downloader for pdan :3",
+  "short_name": "ntho app",
+  "name": "ntho l0v3 pdan",
+  "description": "Đây là ứng dụng Thọ viết dành riêng choa bé Đan",
   "icons": [
     {
       "src": "favicon.ico",
@@ -21,5 +22,5 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#272b30"
 }
