@@ -1,0 +1,18 @@
+.heart {
+     animation: ranbowColor infinite 1s;
+}
+
+@keyframes ranbowColor {
+     0%,
+     100% {
+          color: #FFF;
+     }
+
+     25% {
+          color: rgb(255, 238, 139);
+     }
+
+     50% {
+          color: rgb(255, 139, 139);
+     }
+}

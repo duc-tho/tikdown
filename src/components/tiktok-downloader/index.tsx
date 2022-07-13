@@ -5,7 +5,7 @@ import {
 } from "react-bootstrap";
 import { Alert, AlertColor, Snackbar, CircularProgress  } from '@mui/material';
 // import "./G.scss";
-import { tiktokApi } from "../services/api/tiktok.api";
+import { tiktokApi } from "../../services/api/tiktok.api";
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 

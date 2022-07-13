@@ -3,4 +3,13 @@
      bottom: 0;
      width: 100%;
      background-color: #212529 !important;
+
+     &__button {
+          color: rgb(216, 216, 216) !important;
+          transition: .2s;
+
+          &:hover {
+               color: rgb(240, 240, 240) !important;
+          }
+     }
 }
