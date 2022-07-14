@@ -5,24 +5,26 @@ import TiktokDownloader from "../../components/tiktok-downloader";
 import Home from "../home";
 import Tool from "../tool";
 import classes from "./index.module.scss";
-
+import { Provider, store } from "../../store";
 export default class Master extends Component {
      render() {
           return (
-               <BrowserRouter>
-                    <div className={classes.wrap}>
-                         <div className={classes.pageContentSection}>
-                              <Routes>
-                                   <Route index element={<Home/>}/>
-                                   <Route path="tool">
-                                        <Route index element={<Tool/>}/>
-                                        <Route path="tiktok-downloader" element={<TiktokDownloader />} />
-                                   </Route>
-                              </Routes>
+               <Provider value={store}>
+                    <BrowserRouter>
+                         <div className={classes.wrap}>
+                              <div className={classes.pageContentSection}>
+                                   <Routes>
+                                        <Route index element={<Home />} />
+                                        <Route path="tool">
+                                             <Route index element={<Tool />} />
+                                             <Route path="tiktok-downloader" element={<TiktokDownloader />} />
+                                        </Route>
+                                   </Routes>
+                              </div>
+                              <Navigation />
                          </div>
-                         <Navigation />
-                    </div>
-               </BrowserRouter>
+                    </BrowserRouter>
+               </Provider>
           );
      }
 }

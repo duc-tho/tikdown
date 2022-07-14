@@ -3,34 +3,42 @@ import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import HomeIcon from '@mui/icons-material/Home';
 import { Link } from "react-router-dom";
 import classes from "./index.module.scss";
-import React from "react";
-
-console.log(classes);
+import { observer } from "mobx-react-lite";
+import { useStore } from '../../store';
+import { useEffect } from "react";
 
 const Navigation = () => {
-     const [tab, setTab] = React.useState("home");
+     const { tabStore: { tab, setTab } } = useStore();
      const handleChange = (event: React.SyntheticEvent, newValue: string) => setTab(newValue);
-     
+     const pathMap = {
+          home: '/',
+          tool: '/tool'
+     }
+
+     useEffect(() => {
+          setTab(window.location.pathname);
+     });
+
      return (
           <BottomNavigation value={tab} onChange={handleChange} className={classes.stickyNavigation}>
-                <BottomNavigationAction
+               <BottomNavigationAction
                     className={classes.stickyNavigation__button}
                     component={Link}
-                    to="/"
+                    to={pathMap.home}
+                    value={pathMap.home}
                     label="Home"
-                    value="home"
                     icon={<HomeIcon />}
                />
                <BottomNavigationAction
                     className={classes.stickyNavigation__button}
                     component={Link}
-                    to="/tool"
+                    to={pathMap.tool}
+                    value={pathMap.tool}
                     label="Công cụ"
-                    value="tools"
                     icon={<AutoFixHighIcon />}
                />
           </BottomNavigation>
      );
 };
 
-export default Navigation;
+export default observer(Navigation);
