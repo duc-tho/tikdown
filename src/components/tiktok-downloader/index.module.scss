@@ -1,3 +1,17 @@
 .description {
      color: #ffffff9e;
 }
+
+.listBg {
+     background-color: #00000050;
+     backdrop-filter: blur(5px);
+}
+
+.historyWrap {
+     max-height: 360px;
+     overflow: auto;
+}
+
+.historyTitle span {
+     font-size: 13px !important;
+}

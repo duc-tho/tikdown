@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useStore } from '../../store';
 import classes from './index.module.scss';
 import { ReactSVG } from 'react-svg';
@@ -10,7 +10,6 @@ let loadingIcon = require(`../../assets/image/${iconList[randomIconIndex]}.svg`)
 
 const Overlay = () => {
      const { overlayStore: { showOverlay } } = useStore();
-     console.log(classes);
      
      return (
           <div className={`${classes.wrap} ${showOverlay ? classes.active : ''}`}>

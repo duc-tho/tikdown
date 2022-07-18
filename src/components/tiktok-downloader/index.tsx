@@ -1,21 +1,28 @@
 import axios from "axios";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
      Button, Col, Container, FormControl, InputGroup, Row
 } from "react-bootstrap";
-import { Alert, AlertColor, Snackbar, CircularProgress, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import { Alert, AlertColor, Snackbar, CircularProgress, List, ListItem, ListItemButton, ListItemText, Typography, Link } from '@mui/material';
 // import "./G.scss";
 import { tiktokApi } from "../../services/api/tiktok.api";
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import classes from './index.module.scss';
 import { motion } from "framer-motion";
+import { tiktokHistoryApi } from "../../services/api/tiktok-history.api";
 
 function TiktokDownloader() {
      let [url, setUrl] = useState("");
      let [status, setStatus] = useState("Đang chờ...");
      let [open, setOpen] = useState(false);
      let [loadingData, setLoadingData] = useState(false);
+     let [histories, setHistories] = useState([
+          {
+               title: "loremádfasfdsadfloremádfasfdsadfloremádfasfdsadfloremádfasfdsadfloremádfasfdsadf",
+               createAt: "1658141020854"
+          }
+     ]);
      let notiStatusList: {
           success: AlertColor | undefined,
           info: AlertColor | undefined,
@@ -34,6 +41,8 @@ function TiktokDownloader() {
                getVid(url);
           }, 1000);
 
+          getHistories();
+
           return () => clearTimeout(delayTimeout);
      }, [url]);
 
@@ -42,6 +51,14 @@ function TiktokDownloader() {
 
           setUrl(targetUrl);
      };
+
+     let getHistories = () => {
+          tiktokHistoryApi.getAll().then((res: any) => {
+               console.log(res);
+               
+               setHistories(Object.values(res ?? []));
+          });
+     }
 
      let getVid = (url: string) => {
           if (!url) return;
@@ -168,18 +185,28 @@ function TiktokDownloader() {
                               </InputGroup>
                          </Col>
                     </Row>
-                    {/* <Row className="w-100 m-0">
-                         <Col className="col-12 col-md-4 mx-auto">
-                              <List>
-                                   <ListItem disablePadding>
-                                        <ListItemText primary="Trash" />
-                                   </ListItem>
-                                   <ListItem disablePadding>
-                                        <ListItemText primary="Spam" />
-                                   </ListItem>
-                              </List>
+                    <Row className="m-0">
+                         <Col className={`${classes.historyWrap} col-12 mx-auto`}>
+                              {histories && histories.length > 0 && <List className={`${classes.listBg} text-light shadow rounded`}>
+                                   {histories.map((history: any) => <div>
+                                        <Link href="/" target="_blank" className="text-light" style={{ textDecoration: 'none' }}>
+                                             <ListItem>
+                                                  <ListItemText className={classes.historyTitle}
+                                                       primary={history.title}
+                                                       primaryTypographyProps={{ style: { wordBreak: 'break-all' } }}
+                                                       secondary={
+                                                            <small className="text-muted">
+                                                                 {new Intl.DateTimeFormat("vi", { dateStyle: 'full', timeStyle: 'medium' }).format(history.createAt)}
+                                                            </small>
+                                                       } />
+                                             </ListItem>
+                                        </Link>
+                                        <hr className="m-0" />
+                                   </div>
+                                   )}
+                              </List>}
                          </Col>
-                    </Row> */}
+                    </Row>
                     <Snackbar
                          open={open}
                     >
