@@ -1,9 +1,11 @@
 import { createContext, useContext } from "react";
+import { OverlayStore } from "./overlay.store";
 import { TabStore } from "./tab.store";
 
 
 export const store = {
-     tabStore: new TabStore()
+     tabStore: new TabStore(),
+     overlayStore: new OverlayStore()
 };
 
 export type TStore = typeof store;

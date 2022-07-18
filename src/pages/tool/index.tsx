@@ -1,13 +1,17 @@
 import { Button, Typography } from '@mui/material'
-import React, { Component, Fragment } from 'react'
+import { motion } from 'framer-motion'
+import React, { Component } from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
 export class Tool extends Component {
      render() {
           return (
-               <Fragment>
-                    <Container className='h-100 d-flex justify-content-center align-items-center flex-column'>
+               <Container className='h-100 d-flex justify-content-center align-items-center flex-column'>
+                    <motion.div
+                         initial={{ opacity: 0 }}
+                         animate={{ opacity: 1 }}
+                         transition={{ duration: 1 }}>
                          <Row>
                               <Col>
                                    <Typography variant="h5" className='text-light title text-center'>Công cụ</Typography>
@@ -18,8 +22,8 @@ export class Tool extends Component {
                                    <Button variant="contained">Tải vid tiktok</Button>
                               </Link>
                          </Row>
-                    </Container>
-               </Fragment>
+                    </motion.div>
+               </Container>
           )
      }
 }

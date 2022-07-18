@@ -6,12 +6,17 @@ import Home from "../home";
 import Tool from "../tool";
 import classes from "./index.module.scss";
 import { Provider, store } from "../../store";
+import Overlay from "../../components/overlay";
+import { motion } from "framer-motion";
 export default class Master extends Component {
      render() {
           return (
                <Provider value={store}>
                     <BrowserRouter>
-                         <div className={classes.wrap}>
+                         <motion.div className={classes.wrap}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              transition={{ duration: 1 }}>
                               <div className={classes.pageContentSection}>
                                    <Routes>
                                         <Route index element={<Home />} />
@@ -22,7 +27,8 @@ export default class Master extends Component {
                                    </Routes>
                               </div>
                               <Navigation />
-                         </div>
+                         </motion.div>
+                         <Overlay></Overlay>
                     </BrowserRouter>
                </Provider>
           );

@@ -5,7 +5,9 @@ $base-text-color: #eeeeee;
 $secondary-background: #16191e;
 
 body {
-     background-color: $base-background !important;
+     background-image: url('../image/bg.jpg') !important;
+     background-position: center;
+     background-size: cover;
 }
 
 .text-light {

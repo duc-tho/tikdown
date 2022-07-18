@@ -1,24 +1,26 @@
 import axios from "axios";
 import React, { Fragment, useEffect, useState } from "react";
 import {
-     Button, Col,Container, FormControl, InputGroup, Row
+     Button, Col, Container, FormControl, InputGroup, Row
 } from "react-bootstrap";
-import { Alert, AlertColor, Snackbar, CircularProgress  } from '@mui/material';
+import { Alert, AlertColor, Snackbar, CircularProgress, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 // import "./G.scss";
 import { tiktokApi } from "../../services/api/tiktok.api";
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import classes from './index.module.scss';
+import { motion } from "framer-motion";
 
 function TiktokDownloader() {
      let [url, setUrl] = useState("");
      let [status, setStatus] = useState("Đang chờ...");
      let [open, setOpen] = useState(false);
      let [loadingData, setLoadingData] = useState(false);
-     let notiStatusList: { 
-          success:  AlertColor | undefined,
-          info:  AlertColor | undefined,
-          warning:  AlertColor | undefined,
-          error:  AlertColor | undefined
+     let notiStatusList: {
+          success: AlertColor | undefined,
+          info: AlertColor | undefined,
+          warning: AlertColor | undefined,
+          error: AlertColor | undefined
      } = {
           success: 'success',
           info: 'info',
@@ -56,7 +58,7 @@ function TiktokDownloader() {
                          setLoadingData(false);
                          setStatus(
                               `Lỗi dùi: ${res.response.data.reason ||
-                                   "[500] Hong bít lỗi gì"}`
+                              "[500] Hong bít lỗi gì"}`
                          );
 
                          setTimeout(() => {
@@ -114,36 +116,39 @@ function TiktokDownloader() {
      };
 
      return (
-          <Fragment>
-               <Container
-                    fluid
-                    className="h-100 d-flex justify-content-center align-items-center flex-column"
-               >
+          <Container
+               fluid
+               className="h-100 d-flex justify-content-center align-items-center flex-column"
+          >
+               <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1 }}>
                     <Row>
                          <Col>
-                              <h1 className="text-center display-5 text-light title">
+                              <h1 className="text-center display-5 title">
                                    Trình tải Video Tiktok
                               </h1>
-                              <p className="text-center text-muted">
+                              <p className={`${classes.description} text-center text-muted rounded py-1 px-2`}>
                                    Được thực hiện bởi {" "}
                                    <span className="fw-bold text-info">
                                         ntho
                                    </span>{" "}
-                                        dành cho{" "}
-                                   <span className="fw-bold text-danger">
+                                   dành cho{" "}
+                                   <span className="fw-bold text-warning">
                                         pdan
                                    </span>
                               </p>
                          </Col>
                     </Row>
-                    <Row className="w-lg-75">
-                         <Col>
+                    <Row className="w-100 m-0">
+                         <Col className="col-12 mx-auto">
                               <InputGroup className="mb-3 glow">
                                    <InputGroup.Text
                                         id="link"
                                         className="bg-dark border-dark text-light"
                                    >
-                                        <FavoriteIcon style={{ width: '1rem' }}/>
+                                        <FavoriteIcon style={{ width: '1rem' }} />
                                    </InputGroup.Text>
                                    <FormControl
                                         value={url}
@@ -158,23 +163,35 @@ function TiktokDownloader() {
                                         onClick={pastClickHandle}
                                         disabled={loadingData}
                                    >
-                                        { loadingData ? <CircularProgress size={'1rem'} color="success" /> : <ContentPasteIcon style={{ width: '1rem' }} />}
+                                        {loadingData ? <CircularProgress size={'1rem'} color="success" /> : <ContentPasteIcon style={{ width: '1rem' }} />}
                                    </Button>
                               </InputGroup>
                          </Col>
                     </Row>
+                    {/* <Row className="w-100 m-0">
+                         <Col className="col-12 col-md-4 mx-auto">
+                              <List>
+                                   <ListItem disablePadding>
+                                        <ListItemText primary="Trash" />
+                                   </ListItem>
+                                   <ListItem disablePadding>
+                                        <ListItemText primary="Spam" />
+                                   </ListItem>
+                              </List>
+                         </Col>
+                    </Row> */}
                     <Snackbar
                          open={open}
                     >
                          <Alert
-                              severity={ notiStatus }
+                              severity={notiStatus}
                               sx={{ width: "100%" }}
                          >
-                              { status }
+                              {status}
                          </Alert>
                     </Snackbar>
-               </Container>
-          </Fragment>
+               </motion.div>
+          </Container>
      );
 }
 

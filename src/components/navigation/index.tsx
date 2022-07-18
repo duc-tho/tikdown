@@ -8,8 +8,20 @@ import { useStore } from '../../store';
 import { useEffect } from "react";
 
 const Navigation = () => {
-     const { tabStore: { tab, setTab } } = useStore();
-     const handleChange = (event: React.SyntheticEvent, newValue: string) => setTab(newValue);
+     const { tabStore: { tab, setTab }, overlayStore: { setShowOverlay } } = useStore();
+
+     const handleOverlay = () => {
+          setShowOverlay(true);
+
+          setTimeout(() => {
+               setShowOverlay(false);
+          }, 1000);
+     }
+
+     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+          setTab(newValue);
+          handleOverlay();
+     }
      const pathMap = {
           home: '/',
           tool: '/tool'
