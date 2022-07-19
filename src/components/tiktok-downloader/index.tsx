@@ -17,12 +17,7 @@ function TiktokDownloader() {
      let [status, setStatus] = useState("Đang chờ...");
      let [open, setOpen] = useState(false);
      let [loadingData, setLoadingData] = useState(false);
-     let [histories, setHistories] = useState([
-          {
-               title: "loremádfasfdsadfloremádfasfdsadfloremádfasfdsadfloremádfasfdsadfloremádfasfdsadf",
-               createAt: "1658141020854"
-          }
-     ]);
+     let [histories, setHistories] = useState([]);
      let notiStatusList: {
           success: AlertColor | undefined,
           info: AlertColor | undefined,
@@ -54,10 +49,16 @@ function TiktokDownloader() {
 
      let getHistories = () => {
           tiktokHistoryApi.getAll().then((res: any) => {
-               console.log(res);
+               if (res.data === null) return;
                
                setHistories(Object.values(res ?? []));
           });
+     }
+
+     let saveHistories = (data: any) => {
+          tiktokHistoryApi.post(data)
+               .then(() => getHistories())
+               .catch((e: any) => console.log(`Lỗi save history: ${e}`));
      }
 
      let getVid = (url: string) => {
@@ -70,6 +71,14 @@ function TiktokDownloader() {
           tiktokApi
                .getSingle(`tiktok?url=${url}`)
                .then((res: any) => {
+                    const newHistory = {
+                         title: res.video_title,
+                         url,
+                         wm: res.wm_video_url,
+                         nwm: res.nwm_video_url,
+                         createdAt: new Date().getTime()
+                    };
+
                     if (res.name && res.name === "AxiosError") {
                          setNotiStatus(notiStatusList.error);
                          setLoadingData(false);
@@ -97,6 +106,7 @@ function TiktokDownloader() {
                          }
                     }).then(resp => {
                          let link = document.createElement("a");
+
                          link.target = "_blank";
                          link.download = `${new Date().getTime()}.mp4`;
                          link.href = URL.createObjectURL(
@@ -110,6 +120,7 @@ function TiktokDownloader() {
                          setLoadingData(false);
                          setStatus(`Tải xún thành công! - ${res.video_title}`);
                          setUrl("");
+                         saveHistories(newHistory);
 
                          setTimeout(() => {
                               setOpen(false)
@@ -188,15 +199,15 @@ function TiktokDownloader() {
                     <Row className="m-0">
                          <Col className={`${classes.historyWrap} col-12 mx-auto`}>
                               {histories && histories.length > 0 && <List className={`${classes.listBg} text-light shadow rounded`}>
-                                   {histories.map((history: any) => <div>
-                                        <Link href="/" target="_blank" className="text-light" style={{ textDecoration: 'none' }}>
+                                   {histories.reverse().map((history: any, index) => <div key={index}>
+                                        <Link href={history.url} target="_blank" className="text-light" style={{ textDecoration: 'none' }}>
                                              <ListItem>
                                                   <ListItemText className={classes.historyTitle}
                                                        primary={history.title}
                                                        primaryTypographyProps={{ style: { wordBreak: 'break-all' } }}
                                                        secondary={
                                                             <small className="text-muted">
-                                                                 {new Intl.DateTimeFormat("vi", { dateStyle: 'full', timeStyle: 'medium' }).format(history.createAt)}
+                                                                 {new Intl.DateTimeFormat("vi", { dateStyle: 'full', timeStyle: 'medium' }).format(history.createdAt)}
                                                             </small>
                                                        } />
                                              </ListItem>
