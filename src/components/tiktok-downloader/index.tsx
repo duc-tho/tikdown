@@ -199,7 +199,11 @@ function TiktokDownloader() {
                     <Row className="m-0">
                          <Col className={`${classes.historyWrap} col-12 mx-auto`}>
                               {histories && histories.length > 0 && <List className={`${classes.listBg} text-light shadow rounded`}>
-                                   {histories.reverse().map((history: any, index) => <div key={index}>
+                                   {histories.map((history: any, index) => <motion.div 
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ duration: 1 }}
+                                        key={index}>
                                         <Link href={history.url} target="_blank" className="text-light" style={{ textDecoration: 'none' }}>
                                              <ListItem>
                                                   <ListItemText className={classes.historyTitle}
@@ -213,7 +217,7 @@ function TiktokDownloader() {
                                              </ListItem>
                                         </Link>
                                         <hr className="m-0" />
-                                   </div>
+                                   </motion.div>
                                    )}
                               </List>}
                          </Col>
