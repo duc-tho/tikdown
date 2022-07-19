@@ -199,7 +199,7 @@ function TiktokDownloader() {
                     <Row className="m-0">
                          <Col className={`${classes.historyWrap} col-12 mx-auto`}>
                               {histories && histories.length > 0 && <List className={`${classes.listBg} text-light shadow rounded`}>
-                                   {histories.map((history: any, index) => <motion.div 
+                                   {histories.sort((a: any, b: any) => a.createdAt < b.createdAt ? 1 : -1).map((history: any, index) => <motion.div 
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         transition={{ duration: 1 }}
