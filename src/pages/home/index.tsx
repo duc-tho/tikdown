@@ -4,6 +4,11 @@ import { Col, Container, Row } from 'react-bootstrap'
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import classes from './index.module.scss';
 import { motion } from 'framer-motion';
+import { pushNotiApi } from '../../services/api/tiktok-push-noti.api';
+
+const handlePush = () => {
+     pushNotiApi.post({ title: "Anh ơi :<", body: "Em buồn quá"});
+}
 
 export default function Home() {
      return (
@@ -32,6 +37,19 @@ export default function Home() {
                                    {" "}
                                    <FavoriteIcon className={classes.heart} style={{ width: '1rem' }} />
                               </p>
+                         </Col>
+                    </Row>
+
+                    <Row>
+                         <Col xs="6">
+                              <div className='d-flex bg-dark rounded text-light p-4 text-center justify-content-center align-items-center' onClick={handlePush}>
+                                   Em Buồn {':<'} nói chuyện với emm đi
+                              </div>
+                         </Col>
+                         <Col xs="6" className='d-flex'>
+                              <div className='d-flex bg-dark rounded text-light p-4 text-center justify-content-center align-items-center' onClick={handlePush}>
+                                   <span> Chơi với emmm</span>
+                              </div>
                          </Col>
                     </Row>
                </motion.div>
