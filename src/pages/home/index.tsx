@@ -6,11 +6,10 @@ import classes from './index.module.scss';
 import { motion } from 'framer-motion';
 import { pushNotiApi } from '../../services/api/tiktok-push-noti.api';
 
-const handlePush = () => {
-     pushNotiApi.post({ title: "Anh ơi :<", body: "Em buồn quá"});
-}
-
 export default function Home() {
+     const handleSad = () => pushNotiApi.post({ title: "Anh ơi em buồn!", body: "Ns chuyện với em.." });
+     const handlePlay = () => pushNotiApi.post({ title: "Anh ới!", body: "Chơi với emmm!" });
+
      return (
           <Container className='h-100 d-flex justify-content-center align-items-center flex-column'>
                <motion.div
@@ -42,12 +41,12 @@ export default function Home() {
 
                     <Row>
                          <Col xs="6">
-                              <div className='d-flex bg-dark rounded text-light p-4 text-center justify-content-center align-items-center' onClick={handlePush}>
+                              <div className='d-flex bg-dark rounded text-light p-4 text-center justify-content-center align-items-center' onClick={handleSad}>
                                    Em Buồn {':<'} nói chuyện với emm đi
                               </div>
                          </Col>
                          <Col xs="6" className='d-flex'>
-                              <div className='d-flex bg-dark rounded text-light p-4 text-center justify-content-center align-items-center' onClick={handlePush}>
+                              <div className='d-flex bg-dark rounded text-light p-4 text-center justify-content-center align-items-center' onClick={handlePlay}>
                                    <span> Chơi với emmm</span>
                               </div>
                          </Col>
